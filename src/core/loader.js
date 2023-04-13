@@ -1,5 +1,6 @@
-import { REST, Routes } from "discord.js";
+import { REST, Routes, Collection } from "discord.js";
 import fg from "fast-glob";
+import { useAppStore } from "@/store/app";
 
 const updateSlashCommands = async (commands) => {
   const rest = new REST({ version: 10 }).setToken(process.env.TOKEN);
@@ -20,6 +21,40 @@ const updateSlashCommands = async (commands) => {
   console.log(result);
 };
 
+export const loadCommands = async () => {
+  const appStore = useAppStore();
+  const commands = [];
+  const actions = new Collection();
+  const files = await fg("./src/commands/**/index.js");
+  for (const file of files) {
+    const cmd = await import(file);
+    if (cmd.command && cmd.command.name && cmd.command.description) {
+      commands.push(cmd.command);
+      actions.set(cmd.command.name, cmd.action);
+    }
+  }
+  await updateSlashCommands(commands);
+  appStore.commandsActionMap = actions;
+
+  //console.log("action name  " + appStore.commandsActionMap);
+};
+
+export const loadEvents = async () => {
+  const appStore = useAppStore();
+  const client = appStore.client;
+  const files = await fg("./src/events/**/index.js");
+  for (const file of files) {
+    console.log(file);
+    const eventFile = await import(file);
+
+    if (eventFile.event.once) {
+      client.once(eventFile.event.name, eventFile.action);
+    } else {
+      client.on(eventFile.event.name, eventFile.action);
+    }
+  }
+};
+
 //export const loadCommands = async () => {
 //  const commands = [];
 //  const files = await fg("./src/commands/**/index.js");
@@ -31,15 +66,3 @@ const updateSlashCommands = async (commands) => {
 //
 //  await updateSlashCommands(commands);
 //};
-
-export const loadCommands = async () => {
-  const commands = [];
-  const files = await fg("./src/commands/**/index.js");
-  for (const file of files) {
-    const cmd = await import(file);
-    if (cmd.command && cmd.command.name && cmd.command.description) {
-      commands.push(cmd.command);
-    }
-  }
-  await updateSlashCommands(commands);
-};
