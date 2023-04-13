@@ -20,14 +20,26 @@ const updateSlashCommands = async (commands) => {
   console.log(result);
 };
 
+//export const loadCommands = async () => {
+//  const commands = [];
+//  const files = await fg("./src/commands/**/index.js");
+//  for (const file of files) {
+//    const cmd = await import(file);
+//    commands.push(cmd.command);
+//    //console.log(cmd.command);
+//  }
+//
+//  await updateSlashCommands(commands);
+//};
+
 export const loadCommands = async () => {
   const commands = [];
   const files = await fg("./src/commands/**/index.js");
   for (const file of files) {
     const cmd = await import(file);
-    commands.push(cmd.command);
-    //console.log(cmd.command);
+    if (cmd.command && cmd.command.name && cmd.command.description) {
+      commands.push(cmd.command);
+    }
   }
-
   await updateSlashCommands(commands);
 };
