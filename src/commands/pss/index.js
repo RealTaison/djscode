@@ -34,6 +34,8 @@ function myFunction(input, buffer) {
 
   if (ans == buffer) {
     return "draw";
+  } else if (ans == 2 && buffer == 0) {
+    return "lose";
   } else if (ans == 0 && buffer == 2) {
     return "win";
   } else if (ans > buffer) {
