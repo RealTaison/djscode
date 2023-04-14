@@ -51,6 +51,7 @@ export const loadEvents = async () => {
       client.once(eventFile.event.name, eventFile.action);
     } else {
       client.on(eventFile.event.name, eventFile.action);
+      //console.log(eventFile.action);
     }
   }
 };

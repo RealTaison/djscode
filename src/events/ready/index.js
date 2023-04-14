@@ -2,7 +2,7 @@ import { Events } from "discord.js";
 
 export const event = {
   name: Events.ClientReady,
-  once: true,
+  once: false,
 };
 
 export const action = (c) => {
