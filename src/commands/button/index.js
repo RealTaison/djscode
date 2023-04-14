@@ -7,7 +7,7 @@ import {
 
 export const command = new SlashCommandBuilder()
   .setName("button")
-  .setDescription("button command");
+  .setDescription("paper scissors stone bot with button function implemented");
 
 export const action = async (ctx) => {
   const row = new ActionRowBuilder()
