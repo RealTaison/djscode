@@ -1,2 +1,1 @@
-This is a discord.js bot testing project
-testing
+This discord are made for fun
