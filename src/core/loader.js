@@ -2,13 +2,10 @@ import { REST, Routes, Collection } from "discord.js";
 import fg from "fast-glob";
 import { useAppStore } from "@/store/app";
 
-const updateSlashCommands = async (commands) => {
+const updateSlashCommands = async (commands, guild) => {
   const rest = new REST({ version: 10 }).setToken(process.env.TOKEN);
   const result = await rest.put(
-    Routes.applicationGuildCommands(
-      process.env.APPLICATIION_ID,
-      "892083736244523048"
-    ),
+    Routes.applicationGuildCommands(process.env.APPLICATIION_ID, guild),
     {
       body: commands,
       /*[
@@ -21,7 +18,7 @@ const updateSlashCommands = async (commands) => {
   console.log(result);
 };
 
-export const loadCommands = async () => {
+export const loadCommands = async (guildID) => {
   const appStore = useAppStore();
   const commands = [];
   const actions = new Collection();
@@ -33,10 +30,8 @@ export const loadCommands = async () => {
       actions.set(cmd.command.name, cmd.action);
     }
   }
-  await updateSlashCommands(commands);
+  let guild = await updateSlashCommands(commands, guildID);
   appStore.commandsActionMap = actions;
-
-  //console.log("action name  " + appStore.commandsActionMap);
 };
 
 export const loadEvents = async () => {

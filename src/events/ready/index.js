@@ -5,6 +5,6 @@ export const event = {
   once: false,
 };
 
-export const action = (c) => {
+export const action = async (c) => {
   console.log(`Ready! Logged in as ${c.user.tag}`);
 };
