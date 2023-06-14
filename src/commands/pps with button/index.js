@@ -30,7 +30,7 @@ export const action = async (ctx) => {
         .setStyle(ButtonStyle.Primary)
     );
   await ctx.reply({
-    content: "I think you should...",
+    content: "Paper Scissors Stone!",
     components: [row],
   });
 
